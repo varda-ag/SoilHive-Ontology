@@ -18,6 +18,13 @@ The SoilHive ontology builds upon multiple external standards and ontologies to 
 
 For more detailed information on the specific ontologies, their usage, and the missing concepts we aim to address, see [ontology-details.md](ontology-details.md).
 
+## Standards
+
+SoilHive adheres to key ISO standards to ensure the interoperability and reliability of soil-related data exchange. For more information on the standards we use, visit the [standards.md](standards/standards.md) file, which includes details on each standard and how they are applied.
+
+- [ISO 28258:2013](standards/ISO-28258.md)
+- [ISO 19156:2023](standards/ISO-19156.md)
+
 ## Contribution Guidelines
 
 Contributions to this repository are welcome! If you would like to suggest an ontology or improve the existing ones, please follow the guidelines outlined in [CONTRIBUTING.md](CONTRIBUTING.md).
