@@ -4,10 +4,10 @@ This document outlines the key ontologies used within the SoilHive system, as we
 
 ## External Ontologies
 
-| **Sub-domain**               | **Description**                                              | **Standards**                 | **Candidate Ontologies**                         |
+| **Sub-domain**               | **Description**                                              | **Standards**                 | **Ontologies**                         |
 |------------------------------|--------------------------------------------------------------|-------------------------------|--------------------------------------------------|
 | **Upper Ontology**            | Basic formal ontology                                        | ISO 21838-2                    | [Basic formal ontology](https://basic-formal-ontology.org/)                           |
-| **Observations and Measurements** | Standards for observations and measurements                    | ISO 19156:2023                 | Semantic Sensor Network (SSN), OGC OM Extensions |
+| **Observations and Measurements** | Standards for observations and measurements                    | ISO 19156:2023                 | [Semantic Sensor Network (SSN)](https://www.w3.org/TR/vocab-ssn/), [Extensions to the Semantic Sensor Network Ontology](https://w3c.github.io/sdw-sosa-ssn/ssn-extensions/), [Observations, Measurements, and Samples](https://www.ogc.org/standard/om/) |
 | **Provenance**                | Tracking the origin and history of data                      | PROV-O                         | PROV Ontology                                    |
 | **Location**                  | Geographical referencing                                     | ISO 19112:2019                 | GeoSPARQL                                        |
 | **Citation**                  | Guidelines for citations                                     | ISO 690:2021                   | CiTO (Citation Typing Ontology)                  |
