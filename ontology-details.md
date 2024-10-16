@@ -12,16 +12,16 @@ This document outlines the key ontologies used within the SoilHive system, as we
 | **Location**                  | Geographical referencing                                     | [ISO 19112:2019](https://www.iso.org/standard/70742.html)                 |                                         |
 | **Citation**                  | Guidelines for citations                                     | [ISO 690:2021](https://www.iso.org/standard/72642.html)                   | [CiTO (Citation Typing Ontology)](https://sparontologies.github.io/cito/current/cito.html)                  |
 | **Quantities and Units**      | Units and measurements for soil data                         |               | [QUDT](https://www.qudt.org/)         |
-| **Soil Functions and Properties** | Soil quality and functions                                     | ISO 28258:2013                 | GloSIS, ENVO                                     |
-| **Data Catalog**              | Cataloging and organizing datasets                           | DataCite                       | DataCite Ontology                                |
-| **Land Use**                  | Classification of land use                                   | CORINE                         | CORINE                                           |
-| **Plant Information**         | Information about plant biology and taxonomy                 | Plant Ontology, Crop Ontology  | PO, Crop Ontology                                |
-| **Agronomic Practices**       | Practices and techniques for managing land and crops         | AGRO, DEMETER                  | AGRO, DEMETER                                    |
-| **Fertilizers and Chemicals** | Chemicals used in agriculture                                | ChEBI                          | ChEBI                                            |
-| **Roles in Agronomy**         | Roles and activities in agronomy                             | AGRO, DEMETER                  | AGRO, DEMETER                                    |
-| **Weather and Climate**       | Information about weather and climate                        | ENVO                           | ENVO (TBD)                                       |
-| **Water Management**          | Systems and practices for water resource management          | N/A                            | To be developed                                  |
-| **Biodiversity**              | Biodiversity data standards                                  | N/A                            | TDWG, DWC                                        |
+| **Soil Functions and Properties** | Soil quality and functions                               | [ISO 28258:2013](https://www.iso.org/standard/44595.html)                 | [GloSIS](https://glosis-ld.github.io/glosis/)                                     |
+| **Data Catalog**              | Cataloging and organizing datasets                           |                        | [DataCite Ontology](https://sparontologies.github.io/datacite/current/datacite.html)                                |
+| **Land Use**                  | Classification of land use                                   |                          | [CORINE](https://land.copernicus.eu/content/corine-land-cover-nomenclature-guidelines/html/index.html)                                           |
+| **Plant Information**         | Information about plant biology and taxonomy                 |                    | [PO](https://bioportal.bioontology.org/ontologies/PO/?p=classes&conceptid=root), [Crop Ontology](https://www.cropontology.org/)                                |
+| **Agronomic Practices**       | Practices and techniques for managing land and crops         |                    | [AGRO](https://www.ebi.ac.uk/ols4/ontologies/agro), [DEMETER](https://github.com/rapw3k/DEMETER)                                    |
+| **Fertilizers and Chemicals** | Chemicals used in agriculture                                |                    | [ChEBI](https://www.ebi.ac.uk/chebi/aboutChebiForward.do)                                            |
+| **Roles in Agronomy**         | Roles and activities in agronomy                             |                    | [AGRO](https://www.ebi.ac.uk/ols4/ontologies/agro), [DEMETER](https://github.com/rapw3k/DEMETER)|
+| **Weather and Climate**       | Information about weather and climate                        |                    | [ENVO](https://sites.google.com/site/environmentontology/home)                                       |
+| **Water Management**          | Systems and practices for water resource management          |                    |                                 |
+| **Biodiversity**              | Biodiversity data standards                                  |                    |                                      |
 
 ## Custom Ontologies
 
