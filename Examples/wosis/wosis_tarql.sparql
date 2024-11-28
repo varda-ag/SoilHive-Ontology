@@ -1,0 +1,69 @@
+BASE <https://soilhive.ag/WOSIS/topsoil/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX gn: <http://www.geonames.org/ontology#>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX nuts: <http://dd.eionet.europa.eu/vocabulary/common/nuts/>
+PREFIX iso28258: <http://w3id.org/glosis/model/iso28258/2013/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX glosis_lh: <http://w3id.org/glosis/model/layerhorizon#>
+PREFIX glosis_pr: <http://w3id.org/glosis/model/profile#>
+PREFIX glosis_sp: <http://w3id.org/glosis/model/siteplot/>
+PREFIX cap-parcel: <http://lpis.ec.europa.eu/registry/applicationschema/cap-iacs-parcel#>
+PREFIX glosis_cl: <http://w3id.org/glosis/model/codelists/>
+PREFIX glosis_proc: <http://w3id.org/glosis/model/procedure#>
+PREFIX qudt: <http://qudt.org/schema/qudt/>
+PREFIX unit: <http://qudt.org/vocab/unit/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX sh: <https://www.soilhive.ag/ontology#> 
+
+
+
+CONSTRUCT {
+  # FieldID instance
+  <https://fieldid.varda.ag/field/TJP.25R8> a sh:FieldID ;
+      sh:fieldID "TJP.25R8" ;
+      sh:hasBoundary <https://fieldid.varda.ag/boundary/b9b759f5-1740-4456-9d2b-fe44338e87c2> .
+
+  <https://fieldid.varda.ag/boundary/b9b759f5-1740-4456-9d2b-fe44338e87c2> a sh:Boundary ;
+      sh:boundaryID "b9b759f5-1740-4456-9d2b-fe44338e87c2" .
+
+
+  #site
+  ?siteURI a glosis_sp:GL_Site;
+  rdfs:label ?siteLabel;
+  gsp:hasGeometry ?geometryURI;
+  iso28258:Site.typicalProfile ?profileURI .
+
+  #geometry
+  ?geometryURI a gsp:Geometry ;
+  sh:hasFieldID  <https://fieldid.varda.ag/field/TJP.25R8> ;
+  gsp:asWKT ?wktPoint .
+
+  #layer
+  ?layerURI a glosis_lh:GL_Layer ;
+  rdfs:label ?layerLabel;
+  iso28258:ProfileElement.elementOfProfile ?profileURI ;
+  iso28258:ProfileElement.lowerDepth ?lowerDepth ;
+  iso28258:ProfileElement.upperDepth ?upperDepth .
+
+
+
+} 
+
+FROM <> 
+WHERE {
+  BIND (URI(CONCAT(?profile_id, '/site' )) AS ?siteURI)
+  BIND (CONCAT("Site for WOSIS Profile #", STR(?profile_id)) AS ?siteLabel)
+  BIND (URI(CONCAT(?profile_id, '/geometry' )) AS ?geometryURI)
+  BIND (CONCAT("POINT(", STR(?long)," ", STR(?lat), ")") AS ?wktPoint)
+  BIND (URI(CONCAT(?profile_id, '/profile' )) AS ?profileURI)
+  BIND (URI(CONCAT(?layer_id, '/layer' )) AS ?layerURI)
+  BIND (CONCAT("Layer name : ",STR(?layer_name)) AS ?layerLabel)
+  BIND (CONCAT(STR(?lower_depth),'^^xsd:float') AS ?lowerDepth)
+  BIND (CONCAT(STR(?upper_depth),'^^xsd:float') AS ?upperDepth)
+
+}
+ LIMIT 1
+
+ 

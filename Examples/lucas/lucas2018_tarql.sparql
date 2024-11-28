@@ -1,0 +1,80 @@
+BASE <https://soilhive.ag/LUCAS/topsoil/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX gn: <http://www.geonames.org/ontology#>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX nuts: <http://dd.eionet.europa.eu/vocabulary/common/nuts/>
+PREFIX iso28258: <http://w3id.org/glosis/model/iso28258/2013/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX glosis_lh: <http://w3id.org/glosis/model/layerhorizon#>
+PREFIX glosis_pr: <http://w3id.org/glosis/model/profile#>
+PREFIX glosis_sp: <http://w3id.org/glosis/model/siteplot/>
+PREFIX cap-parcel: <http://lpis.ec.europa.eu/registry/applicationschema/cap-iacs-parcel#>
+PREFIX glosis_cl: <http://w3id.org/glosis/model/codelists/>
+PREFIX glosis_proc: <http://w3id.org/glosis/model/procedure#>
+PREFIX qudt: <http://qudt.org/schema/qudt/>
+PREFIX unit: <http://qudt.org/vocab/unit/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+  #site
+  ?siteURI a glosis_sp:GL_Site;
+  rdfs:label ?siteLabel;
+  gsp:hasGeometry ?geometryURI ;
+  gn:parentADM1 ?parentAdm1;
+  gn:parentADM2 ?parentAdm2;  
+  gn:parentADM3 ?parentAdm3;
+  gn:parentADM3 ?parentAdm4;
+  iso28258:Site.typicalProfile ?profileURI .
+
+  #profile
+  ?profileURI a glosis_pr:GL_Profile ;
+  rdfs:label ?profileLabel ;
+  iso28258:Profile.element ?layerURI .
+
+  #geometry
+  ?geometryURI a gsp:Geometry ;
+  gsp:asWKT ?wktPoint .
+
+  #layer, todo: apply unique identifier to layer within a profile
+  ?layerURI a glosis_lh:GL_Layer ;
+  rdfs:label ?layerLabel .
+
+  #site observation
+  ?landuseURI a glosis_sp:LandUseClass ;
+  rdfs:label ?LU ;
+  rdfs:label ?LU1_Desc ;
+  rdfs:label ?lu_3char ;
+  sosa:hasFeatureOfInterest ?siteURI ;
+  sosa:hasResult ?glosis_lu;
+  sosa:observedProperty glosis_sp:landUseClassProperty .
+
+} 
+FROM <> 
+WHERE {
+  BIND (URI(CONCAT(?POINTID, '/site' )) AS ?siteURI)
+  BIND (URI(CONCAT(?POINTID, '/profile' )) AS ?profileURI)
+  BIND (URI(CONCAT(?POINTID, '/geometry' )) AS ?geometryURI)
+  BIND (URI(CONCAT(?POINTID, '/layer/', REPLACE(?Depth, " cm", "") )) AS ?layerURI)
+  BIND (URI(CONCAT(?POINTID, '/landuse' )) AS ?landuseURI)
+  BIND (CONCAT("Site for LUCAS #", STR(?POINTID)) AS ?siteLabel)
+  BIND (CONCAT("Profile for LUCAS #", STR(?POINTID)) AS ?profileLabel)
+  BIND (CONCAT("Layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?layerLabel)
+  BIND (CONCAT("Land use for LUCAS #", STR(?POINTID)) AS ?landuseLabel)
+  BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_0)) AS ?parentAdm1)
+  BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_1)) AS ?parentAdm2)
+  BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_2)) AS ?parentAdm3)
+  BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_3)) AS ?parentAdm4)
+  BIND (CONCAT("POINT(", STR(?TH_LONG)," ", STR(?TH_LAT), ")") AS ?wktPoint)
+  BIND(SUBSTR(?LU,1,3) AS ?lu_3char)
+
+
+  OPTIONAL{
+     VALUES (?lu_3char ?glosis_lu) {
+      ( "U12" glosis_cl:landUseClassValueCode-F)
+      ( "U11" glosis_cl:landUseClassValueCode-M)
+    }
+  }
+
+}
+# LIMIT 1

@@ -1,0 +1,44 @@
+@prefix glosis_cl:  <http://w3id.org/glosis/model/codelists/> .
+@prefix qudt:  <http://qudt.org/schema/qudt/> .
+@prefix gsp:  <http://www.opengis.net/ont/geosparql#> .
+@prefix iso28258:  <http://w3id.org/glosis/model/iso28258/2013/> .
+@prefix gn:  <http://www.geonames.org/ontology#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix glosis_proc:  <http://w3id.org/glosis/model/procedure#> .
+@prefix unit:  <http://qudt.org/vocab/unit/> .
+@prefix nuts:  <http://dd.eionet.europa.eu/vocabulary/common/nuts/> .
+@prefix sh:  <https://www.soilhive.ag/ontology#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix glosis_pr:  <http://w3id.org/glosis/model/profile#> .
+@prefix glosis_sp:  <http://w3id.org/glosis/model/siteplot/> .
+@prefix glosis_lh:  <http://w3id.org/glosis/model/layerhorizon#> .
+@prefix sosa:  <http://www.w3.org/ns/sosa/> .
+@prefix cap-parcel:  <http://lpis.ec.europa.eu/registry/applicationschema/cap-iacs-parcel#> .
+
+<https://fieldid.varda.ag/field/TJP.25R8>
+        rdf:type        sh:FieldID ;
+        sh:fieldID      "TJP.25R8" ;
+        sh:hasBoundary  <https://fieldid.varda.ag/boundary/b9b759f5-1740-4456-9d2b-fe44338e87c2> .
+
+<https://fieldid.varda.ag/boundary/b9b759f5-1740-4456-9d2b-fe44338e87c2>
+        rdf:type       sh:Boundary ;
+        sh:boundaryID  "b9b759f5-1740-4456-9d2b-fe44338e87c2" .
+
+<https://soilhive.ag/WOSIS/topsoil/574478/site>
+        rdf:type                      glosis_sp:GL_Site ;
+        rdfs:label                    "Site for WOSIS Profile #574478" ;
+        gsp:hasGeometry               <https://soilhive.ag/WOSIS/topsoil/574478/geometry> ;
+        iso28258:Site.typicalProfile  <https://soilhive.ag/WOSIS/topsoil/574478/profile> .
+
+<https://soilhive.ag/WOSIS/topsoil/574478/geometry>
+        rdf:type       gsp:Geometry ;
+        sh:hasFieldID  <https://fieldid.varda.ag/field/TJP.25R8> ;
+        gsp:asWKT      "POINT(12.035 -15.742659)" .
+
+<https://soilhive.ag/WOSIS/topsoil/77584/layer>
+        rdf:type    glosis_lh:GL_Layer ;
+        rdfs:label  "Layer name : Ck2" ;
+        iso28258:ProfileElement.elementOfProfile  <https://soilhive.ag/WOSIS/topsoil/574478/profile> ;
+        iso28258:ProfileElement.lowerDepth  "25^^xsd:float" ;
+        iso28258:ProfileElement.upperDepth  "4^^xsd:float" .
