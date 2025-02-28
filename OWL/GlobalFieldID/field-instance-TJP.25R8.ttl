@@ -1,0 +1,15 @@
+@prefix : <http://example.org/data#> .
+@prefix ont: <http://example.org/ontology#> .
+
+:dataField1 a ont:Field ;
+    ont:fieldID "TJP.25R8" ;
+    ont:hasBoundary :dataBoundary1 ;
+    ont:hasTemporalExtent :temporalExtent1 .
+
+:dataBoundary1 a ont:Boundary ;
+    ont:boundaryID "b9b759f5-1740-4456-9d2b-fe44338e87c2" .
+
+:temporalExtent1 a ont:TemporalExtent ;
+    ont:createdAt "2022-11-04T22:39:05.943352+00:00"^^xsd:dateTime ;
+    ont:effectiveFrom "2022-11-04T22:39:05.943352+00:00"^^xsd:dateTime ;
+    ont:effectiveTo "9999-12-31T00:00:00+00:00"^^xsd:dateTime .

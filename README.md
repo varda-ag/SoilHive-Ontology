@@ -11,6 +11,7 @@ This repository is structured as follows:
 - A collection of ontologies that are integrated into the SoilHive system.
 - A set of custom ontology snippets we develop to address missing concepts.
 - Documentation of each ontology and its role in the system.
+- Examples on how to map some of the datasources integrated in SoilHive (LUCAS, HWSDv2, WoSIS) to the collection of ontologies metioned above.
 
 ## Ontology Overview
 

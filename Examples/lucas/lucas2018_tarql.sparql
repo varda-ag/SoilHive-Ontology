@@ -1,4 +1,4 @@
-BASE <https://soilhive.ag/LUCAS/topsoil/>
+BASE <https://soilhive.ag/datasets/lucas2018/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
 PREFIX gn: <http://www.geonames.org/ontology#>
@@ -21,10 +21,11 @@ CONSTRUCT {
   ?siteURI a glosis_sp:GL_Site;
   rdfs:label ?siteLabel;
   gsp:hasGeometry ?geometryURI ;
+  glosis_sp:altitude ?Elev ;
   gn:parentADM1 ?parentAdm1;
   gn:parentADM2 ?parentAdm2;  
   gn:parentADM3 ?parentAdm3;
-  gn:parentADM3 ?parentAdm4;
+  gn:parentADM4 ?parentAdm4;
   iso28258:Site.typicalProfile ?profileURI .
 
   #profile
@@ -38,9 +39,11 @@ CONSTRUCT {
 
   #layer, todo: apply unique identifier to layer within a profile
   ?layerURI a glosis_lh:GL_Layer ;
-  rdfs:label ?layerLabel .
+  rdfs:label ?layerLabel ;
+  iso28258:ProfileElement.lowerDepth ?lowerDepth ;
+  iso28258:ProfileElement.upperDepth ?upperDepth .
 
-  #site observation
+  #site observations (land use and land cover)
   ?landuseURI a glosis_sp:LandUseClass ;
   rdfs:label ?LU ;
   rdfs:label ?LU1_Desc ;
@@ -49,32 +52,190 @@ CONSTRUCT {
   sosa:hasResult ?glosis_lu;
   sosa:observedProperty glosis_sp:landUseClassProperty .
 
+  ?landcoverURI a sosa:Observation ;
+  rdfs:label ?landcoverLabel ;
+  rdfs:label ?LC1_Desc ;
+  sosa:hasFeatureOfInterest ?siteURI ;
+  sosa:hasResult ?LC;
+  sosa:observedProperty cap-parcel:landCover .
+
+  #layer observations
+  # pH_CaCl2
+  ?phCaCl2URI a glosis_lh:PH ;
+  	rdfs:label ?phCaCl2Label ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?phCaCl2ValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-pH ;
+    sosa:usedProcedure glosis_proc:pHProcedure-pHCaCl2 .
+
+  # pH_CaCl2 value
+  ?phCaCl2ValueURI a glosis_lh:PHValue ;
+  	rdfs:label ?phCaCl2ValueLabel ;
+  	qudt:numericValue ?pH_CaCl2 ;
+  	qudt:unit unit:PH .
+
+  # pH_H2O
+  ?pHH2OURI a glosis_lh:PH ;
+  	rdfs:label ?pHH2OLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?pHH2OValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-pH ;
+    sosa:usedProcedure glosis_proc:pHProcedure-pHH2O .
+
+  # pH_H2O value
+  ?pHH2OValueURI a glosis_lh:PHValue ;
+  	rdfs:label ?pHH2OValueLabel ;
+  	qudt:numericValue ?pH_H2O ;
+  	qudt:unit unit:PH .
+
+  # EC
+  ?ECURI a glosis_lh:ElectricalConductivity ;
+  	rdfs:label ?ECLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?ECValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Eleccond .
+
+  # EC value
+  ?ECValueURI a glosis_lh:ElectricalConductivityValue ;
+  	rdfs:label ?ECValueLabel ;
+  	qudt:numericValue ?ECValue ;
+  	qudt:unit unit:DeciS-PER-M .
+
+  # OC
+  ?OCURI a glosis_lh:CarbonOrganic ;
+  	rdfs:label ?OCLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?OCValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Carorg ;
+    sosa:usedProcedure glosis_proc:OrgC_dc .
+
+  # OC value
+  ?OCValueURI a glosis_lh:CarbonOrganicValue ;
+  	rdfs:label ?OCValueLabel ;
+  	qudt:numericValue ?OC ;
+  	qudt:unit unit:GM-per-KiloGM .
+
+  # CaCO3
+  ?CaCO3URI a glosis_lh:TotalCarbonateEquivalent ;
+  	rdfs:label ?CaCO3Label ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?CaCO3ValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Calfra ;
+    sosa:usedProcedure glosis_proc:CaCO3_ca01 .
+
+  # CaCO3 value
+  ?CaCO3ValueURI a glosis_lh:PHValue ;
+  	rdfs:label ?CaCO3ValueLabel ;
+  	qudt:numericValue ?CaCO3 ;
+  	qudt:unit unit:GM-per-KiloGM .
+
+  # P
+  ?PURI a glosis_lh:PhosphorusTotalElements ;
+  	rdfs:label ?PLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?PValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Photot .
+
+  # P value
+  ?PValueURI a glosis_lh:PhosphorusTotalElementsValue ;
+  	rdfs:label ?PValueLabel ;
+  	qudt:numericValue ?P ;
+  	qudt:unit unit:PERCENT .
+
+  # N
+  ?NURI a glosis_lh:NitrogenTotal ;
+  	rdfs:label ?NLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?NValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Nittot ;
+    sosa:usedProcedure glosis_proc:TotalN_kjeldahl .
+
+  # N value
+  ?NValueURI a glosis_lh:NitrogenTotalValue ;
+  	rdfs:label ?NValueLabel ;
+  	qudt:numericValue ?N ;
+  	qudt:unit unit:GM-per-KiloGM .
+
+  # K
+  ?KURI a glosis_lh:PotassiumExtractableElements ;
+  	rdfs:label ?KLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?KValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Potext .
+
+  # K value
+  ?KValueURI a glosis_lh:PotassiumExtractableElementsValue ;
+  	rdfs:label ?KValueLabel ;
+  	qudt:numericValue ?KValue ;
+  	qudt:unit unit:PERCENT .
+
+  # TODO: Add SURVEY_DATE, Ox_Al, Ox_Fe
+
 } 
 FROM <> 
 WHERE {
   BIND (URI(CONCAT(?POINTID, '/site' )) AS ?siteURI)
   BIND (URI(CONCAT(?POINTID, '/profile' )) AS ?profileURI)
   BIND (URI(CONCAT(?POINTID, '/geometry' )) AS ?geometryURI)
-  BIND (URI(CONCAT(?POINTID, '/layer/', REPLACE(?Depth, " cm", "") )) AS ?layerURI)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", "") )) AS ?layerURI)
   BIND (URI(CONCAT(?POINTID, '/landuse' )) AS ?landuseURI)
+  BIND (URI(CONCAT(?POINTID, '/landcover' )) AS ?landcoverURI)
   BIND (CONCAT("Site for LUCAS #", STR(?POINTID)) AS ?siteLabel)
   BIND (CONCAT("Profile for LUCAS #", STR(?POINTID)) AS ?profileLabel)
   BIND (CONCAT("Layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?layerLabel)
   BIND (CONCAT("Land use for LUCAS #", STR(?POINTID)) AS ?landuseLabel)
+  BIND (CONCAT("Land cover for LUCAS #", STR(?POINTID)) AS ?landcoverLabel)
   BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_0)) AS ?parentAdm1)
   BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_1)) AS ?parentAdm2)
   BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_2)) AS ?parentAdm3)
   BIND (IRI(CONCAT("http://dd.eionet.europa.eu/vocabulary/common/nuts/", ?NUTS_3)) AS ?parentAdm4)
   BIND (CONCAT("POINT(", STR(?TH_LONG)," ", STR(?TH_LAT), ")") AS ?wktPoint)
-  BIND(SUBSTR(?LU,1,3) AS ?lu_3char)
+  BIND(REPLACE(STRAFTER(?Depth,"-"), " cm", "") AS ?lowerDepth)
+  BIND(STRBEFORE(?Depth,"-") AS ?upperDepth)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/pHCaCl2' )) AS ?phCaCl2URI)
+  BIND(CONCAT("pH CaCl2 for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?phCaCl2Label)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/pHCaCl2/value' )) AS ?phCaCl2ValueURI)
+  BIND(CONCAT("pH CaCl2 value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?phCaCl2ValueLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/pHH2O' )) AS ?pHH2OURI)
+  BIND(CONCAT("pH H2O for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?pHH2OLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/pHH2O/value' )) AS ?pHH2OValueURI)
+  BIND(CONCAT("pH H2O value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?pHH2OValueLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/EC' )) AS ?ECURI)
+  BIND(CONCAT("EC for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?ECLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/EC/value' )) AS ?ECValueURI)
+  BIND(CONCAT("EC value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?ECValueLabel)
+  BIND(STR(xsd:float(?EC)/100) AS ?ECValue)
+  BIND(STR(xsd:float(?K)/10000) AS ?KValue)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/OC' )) AS ?OCURI)
+  BIND(CONCAT("OC for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?OCLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/OC/value' )) AS ?OCValueURI)
+  BIND(CONCAT("OC value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?OCValueLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/CaCO3' )) AS ?CaCO3URI)
+  BIND(CONCAT("CaCO3 for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?CaCO3Label)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/CaCO3/value' )) AS ?CaCO3ValueURI)
+  BIND(CONCAT("CaCO3 value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?CaCO3ValueLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/P' )) AS ?PURI)
+  BIND(CONCAT("P for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?PLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/P/value' )) AS ?PValueURI)
+  BIND(CONCAT("P value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?PValueLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/N' )) AS ?NURI)
+  BIND(CONCAT("N for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?NLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/N/value' )) AS ?NValueURI)
+  BIND(CONCAT("N value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?NValueLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/K' )) AS ?KURI)
+  BIND(CONCAT("K for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?KLabel)
+  BIND (URI(CONCAT(?POINTID, '/profileElement/layer/', REPLACE(?Depth, " cm", ""), '/observation/K/value' )) AS ?KValueURI)
+  BIND(CONCAT("K value for layer ", ?Depth,  " for LUCAS #",STR(?POINTID)) AS ?KValueLabel)
 
 
+  # TODO: Add remaining values
   OPTIONAL{
      VALUES (?lu_3char ?glosis_lu) {
       ( "U12" glosis_cl:landUseClassValueCode-F)
       ( "U11" glosis_cl:landUseClassValueCode-M)
     }
   }
+  # TODO: Map land cover classes
 
 }
-# LIMIT 1
+LIMIT 200
