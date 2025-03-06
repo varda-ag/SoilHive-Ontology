@@ -1,0 +1,376 @@
+BASE <https://soilhive.ag/datasets/HWSDv2/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX gn: <http://www.geonames.org/ontology#>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX nuts: <http://dd.eionet.europa.eu/vocabulary/common/nuts/>
+PREFIX iso28258: <http://w3id.org/glosis/model/iso28258/2013/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX glosis_lh: <http://w3id.org/glosis/model/layerhorizon#>
+PREFIX glosis_pr: <http://w3id.org/glosis/model/profile#>
+PREFIX glosis_sp: <http://w3id.org/glosis/model/siteplot/>
+PREFIX cap-parcel: <http://lpis.ec.europa.eu/registry/applicationschema/cap-iacs-parcel#>
+PREFIX glosis_cl: <http://w3id.org/glosis/model/codelists/>
+PREFIX glosis_proc: <http://w3id.org/glosis/model/procedure#>
+PREFIX qudt: <http://qudt.org/schema/qudt/>
+PREFIX unit: <http://qudt.org/vocab/unit/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+  #site
+  ?siteURI a glosis_sp:GL_Site;
+  rdfs:label ?siteLabel;
+  gsp:hasGeometry ?geometryURI ;
+  iso28258:Site.typicalProfile ?profileURI .
+
+  #profile
+  ?profileURI a glosis_pr:GL_Profile ;
+  rdfs:label ?profileLabel ;
+  iso28258:Profile.element ?layerURI .
+
+  #geometry
+  ?geometryURI a gsp:Geometry ;
+  gsp:asWKT ?geometry .
+
+  #layer, todo: apply unique identifier to layer within a profile
+  ?layerURI a glosis_lh:GL_Layer ;
+  rdfs:label ?layerLabel ;
+  iso28258:ProfileElement.lowerDepth ?BOTDEP ;
+  iso28258:ProfileElement.upperDepth ?TOPDEP .
+
+  #layer observation
+  # WRB_PHASES
+  ?WRBURI a glosis_pr:SoilClassificationWRB ;
+  rdfs:label ?WRBLabel ;
+  sosa:hasFeatureOfInterest ?layerURI ;
+  sosa:hasSimpleResult ?WRB_PHASES ;
+  sosa:observedProperty glosis_pr:SoilClassificationWRBProperty .
+  # Coarse
+  ?coarseURI a glosis_lh:CoarseFragments ;
+  	rdfs:label ?coarseLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?coarseValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-CoaFra .
+
+  # Coarse value
+  ?coarseValueURI a glosis_lh:CoarseFragmentsValue ;
+  	rdfs:label ?coarseValueLabel ;
+  	qudt:numericValue ?COARSE ;
+  	qudt:unit unit:PERCENT .
+
+    # Clay
+  ?clayURI a glosis_lh:ClayFractionTexture ;
+  	rdfs:label ?clayLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?clayValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Textclay .
+
+  # Clay value
+  ?clayValueURI a glosis_lh:ClayFractionTextureValue ;
+  	rdfs:label ?clayValueLabel ;
+  	qudt:numericValue ?CLAY ;
+  	qudt:unit unit:GM-per-HectoGM .
+  
+  # Silt
+  ?siltURI a glosis_lh:SiltFractionTexture ;
+  	rdfs:label ?siltLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?siltValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Textsilt .
+
+  # Silt value
+  ?siltValueURI a glosis_lh:SiltFractionTextureValue ;
+  	rdfs:label ?siltValueLabel ;
+  	qudt:numericValue ?SILT ;
+  	qudt:unit unit:GM-per-HectoGM .
+
+  # Sand
+  ?sandURI a glosis_lh:SandFractionTexture ;
+  	rdfs:label ?sandLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?sandValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Textsand .
+  
+  # Sand value
+  ?sandValueURI a glosis_lh:SandFractionTextureValue ;
+  	rdfs:label ?sandValueLabel ;
+  	qudt:numericValue ?SAND ;
+  	qudt:unit unit:GM-per-HectoGM .   
+
+  # BULK
+  ?bulkURI a glosis_lh:BulkDensityWholeSoil ;
+  	rdfs:label ?bulkLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?bulkValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-BulDwhole .
+  
+  # BULK value
+  ?bulkValueURI a glosis_lh:BulkDensityWholeSoilValue ;
+  	rdfs:label ?bulkValueLabel ;
+  	qudt:numericValue ?BULK ;
+  	qudt:unit unit:GM-PER-CentiM3 .  
+
+  # REF_BULK
+  ?refBulkURI a glosis_lh:BulkDensityWholeSoil ;
+  	rdfs:label ?refBulkLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?refBulkValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-BulDwhole .
+  
+  # REF_BULK value
+  ?refBulkValueURI a glosis_lh:BulkDensityWholeSoilValue ;
+  	rdfs:label ?refBulkValueLabel ;
+  	qudt:numericValue ?REF_BULK ;
+  	qudt:unit unit:GM-PER-CentiM3 .  
+
+  # ORG_CARBON
+  ?OCURI a glosis_lh:CarbonOrganic ;
+  	rdfs:label ?OCLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?OCValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Carorg .
+
+  # ORG_CARBON value
+  ?OCValueURI a glosis_lh:CarbonOrganicValue ;
+  	rdfs:label ?OCValueLabel ;
+  	qudt:numericValue ?ORG_CARBON ;
+  	qudt:unit unit:GM-per-HectoGM .
+  
+  # PH_WATER
+  ?pHH2OURI a glosis_lh:PH ;
+  	rdfs:label ?pHH2OLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?pHH2OValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-pH ;
+    sosa:usedProcedure glosis_proc:pHProcedure-pHH2O .
+
+  # PH_WATER value
+  ?pHH2OValueURI a glosis_lh:PHValue ;
+  	rdfs:label ?pHH2OValueLabel ;
+  	qudt:numericValue ?PH_WATER ;
+  	qudt:unit unit:PH .
+
+  # TOTAL_N
+  ?NURI a glosis_lh:NitrogenTotal ;
+  	rdfs:label ?NLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?NValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalPropertyCode-Nittot .
+
+  # TOTAL_N value
+  ?NValueURI a glosis_lh:NitrogenTotalValue ;
+  	rdfs:label ?NValueLabel ;
+  	qudt:numericValue ?TOTAL_N ;
+  	qudt:unit unit:GM-per-KiloGM .
+
+  # EC
+  ?ECURI a glosis_lh:ElectricalConductivity ;
+  	rdfs:label ?ECLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?ECValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Eleccond .
+
+  # EC value
+  ?ECValueURI a glosis_lh:ElectricalConductivityValue ;
+  	rdfs:label ?ECValueLabel ;
+  	qudt:numericValue ?ELEC_COND ;
+  	qudt:unit unit:DeciS-PER-M .
+
+  # CEC_SOIL
+  ?cecSoilURI a glosis_lh:CationExchangeCapacitycSoil ;
+  	rdfs:label ?cecSoilLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?cecSoilValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-CEC .
+
+  #  CEC_SOIL value
+  ?cecSoilValueURI a glosis_lh:CationExchangeCapacitycSoilValue ;
+  	rdfs:label ?cecSoilValueLabel ;
+  	qudt:numericValue ?CEC_SOIL ;
+  	qudt:unit unit:CentiMOL-PER-KiloGM .
+
+  #CEC_CLAY
+  ?cecClayURI a glosis_lh:CationExchangeCapacity ;
+  	rdfs:label ?cecClayLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?cecClayValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-CEC .
+
+  # CEC_CLAY value
+  ?cecClayValueURI a glosis_lh:CationExchangeCapacitycValue ;
+  	rdfs:label ?cecClayValueLabel ;
+  	qudt:numericValue ?CEC_CLAY ;
+  	qudt:unit unit:CentiMOL-PER-KiloGM .
+
+  # CEC_EFF
+  ?cecEffURI a glosis_lh:CationExchangeCapacityEffective ;
+  	rdfs:label ?cecEffLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?cecEffValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-ECEC .
+
+  # CEC_EFF value
+  ?cecEffValueURI a glosis_lh:CationExchangeCapacitycSoilValue ;
+  	rdfs:label ?cecEffValueLabel ;
+  	qudt:numericValue ?CEC_EFF ;
+  	qudt:unit unit:CentiMOL-PER-KiloGM .
+
+  # BSAT
+  ?bSatURI a glosis_lh:BaseSaturation ;
+  	rdfs:label ?bSatLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?bSatValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Bassum .
+
+  #  BSAT value
+  ?bSatValueURI a glosis_lh:BaseSaturationValue ;
+  	rdfs:label ?bSatValueLabel ;
+  	qudt:numericValue ?BSAT ;
+  	qudt:unit unit:PERCENT .
+
+  # ALUM_SAT
+  ?alumSatURI a glosis_lh:AluminiumExchangeableBases ;
+  	rdfs:label ?alumSatLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?alumSatValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Alusat .
+
+  # ALUM_SAT value
+  ?alumSatValueURI a glosis_lh:AluminiumExchangeableBasesValue ;
+  	rdfs:label ?alumSatValueLabel ;
+  	qudt:numericValue ?ALUM_SAT ;
+  	qudt:unit unit:PERCENT .
+
+  # ESP
+  ?espURI a glosis_lh:SodiumExchangeableBases ;
+  	rdfs:label ?espLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?espValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Sodexc .
+
+  # ESP value
+  ?espValueURI a glosis_lh:SodiumExchangeableBasesValue ;
+  	rdfs:label ?espValueLabel ;
+  	qudt:numericValue ?ESP ;
+  	qudt:unit unit:PERCENT .
+
+  # TCARBON_EQ
+  ?tCEqURI a glosis_lh:TotalCarbonateEquivalent ;
+  	rdfs:label ?tCEqLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?tCEqValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Bassum .
+
+  # TCARBON_EQ value
+  ?tCEqValueURI a glosis_lh:TotalCarbonateEquivalentValue ;
+  	rdfs:label ?tCEqValueLabel ;
+  	qudt:numericValue ?TCARBON_EQ ;
+  	qudt:unit unit:PERCENT .
+
+  # GYPSUM
+  ?gypsumURI a glosis_lh:TotalCarbonateEquivalent ;
+  	rdfs:label ?gypsumLabel ;
+  	sosa:hasFeatureOfInterest ?layerURI ;
+  	sosa:hasResult ?gypsumValueURI ;
+  	sosa:observedProperty glosis_cl:physioChemicalValueCode-Bassum .
+
+  # GYPSUM value
+  ?gypsumValueURI a glosis_lh:TotalCarbonateEquivalentValue ;
+  	rdfs:label ?gypsumValueLabel ;
+  	qudt:numericValue ?GYPSUM ;
+  	qudt:unit unit:PERCENT .
+
+  # TODO: Map SEQUENCE, COVERAGE, SHARE, TEXTURE_SOTER, AWC, CN_RATIO, TEB
+
+} 
+FROM <> 
+WHERE {
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/site' )) AS ?siteURI)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profile' )) AS ?profileURI)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/geometry' )) AS ?geometryURI)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER )) AS ?layerURI)
+  BIND (CONCAT("Site for HWSD #", STR(?HWSD2_SMU_ID)) AS ?siteLabel)
+  BIND (CONCAT("Profile for HWSD #", STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?profileLabel)
+  BIND (CONCAT("Layer ", ?LAYER, " (depths ", ?TOPDEP, "-", ?BOTDEP, "cm)" , " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?layerLabel)
+
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/WRB' )) AS ?WRBURI)
+  BIND(CONCAT("WRB classification for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?WRBLabel)
+
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/coarse' )) AS ?coarseURI)
+  BIND(CONCAT("Coarse fragments for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?coarseLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/coarse/value' )) AS ?coarseValueURI)
+  BIND(CONCAT("Coarse fragments value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?coarseValueLabel)
+  
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/clay' )) AS ?clayURI)
+  BIND(CONCAT("Clay fraction for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?clayLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/clay/value' )) AS ?clayValueURI)
+  BIND(CONCAT("Clay fraction value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?clayValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/silt' )) AS ?siltURI)
+  BIND(CONCAT("Silt fraction for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?siltLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/silt/value' )) AS ?siltValueURI)
+  BIND(CONCAT("Silt fraction value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?siltValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/sand' )) AS ?sandURI)
+  BIND(CONCAT("Sand fraction for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?sandLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/sand/value' )) AS ?sandValueURI)
+  BIND(CONCAT("Sand fraction value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?sandValueLabel)
+
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/bulk' )) AS ?bulkURI)
+  BIND(CONCAT("Bulk density for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?bulkLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/bulk/value' )) AS ?bulkValueURI)
+  BIND(CONCAT("Bulk density value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?bulkValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/refBulk' )) AS ?refBulkURI)
+  BIND(CONCAT("Reference bulk density for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?refBulkLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/refBulk/value' )) AS ?refBulkValueURI)
+  BIND(CONCAT("Reference bulk density value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?refBulkValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/OC' )) AS ?OCURI)
+  BIND(CONCAT("Organic carbon for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?OCLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/OC/value' )) AS ?OCValueURI)
+  BIND(CONCAT("Organic carbon value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?OCValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/pHH2O' )) AS ?pHH2OURI)
+  BIND(CONCAT("pH H2O for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?pHH2OLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/pHH2O/value' )) AS ?pHH2OValueURI)
+  BIND(CONCAT("pH H2O value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?pHH2OValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/N' )) AS ?NURI)
+  BIND(CONCAT("Total Nitrogen for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?NLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/N/value' )) AS ?NValueURI)
+  BIND(CONCAT("Total Nitrogen value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?NValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/EC' )) AS ?ECURI)
+  BIND(CONCAT("EC for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?ECLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/EC/value' )) AS ?ECValueURI)
+  BIND(CONCAT("EC value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?ECValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/cecSoil' )) AS ?cecSoilURI)
+  BIND(CONCAT("CEC Soil for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?cecSoilLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/cecSoil/value' )) AS ?cecSoilValueURI)
+  BIND(CONCAT("CEC Soil value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?cecSoilValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/cecClay' )) AS ?cecClayURI)
+  BIND(CONCAT("CEC Clay for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?cecClayLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/cecClay/value' )) AS ?cecClayValueURI)
+  BIND(CONCAT("CEC Clay value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?cecClayValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/cecEff' )) AS ?cecEffURI)
+  BIND(CONCAT("ECEC for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?cecEffLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/cecEff/value' )) AS ?cecEffValueURI)
+  BIND(CONCAT("ECEC value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?cecEffValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/bSat' )) AS ?bSatURI)
+  BIND(CONCAT("Base saturation for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?bSatLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/bSat/value' )) AS ?bSatValueURI)
+  BIND(CONCAT("Base saturation value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?bSatValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/alumSat' )) AS ?alumSatURI)
+  BIND(CONCAT("Aluminium saturation for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?alumSatLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/alumSat/value' )) AS ?alumSatValueURI)
+  BIND(CONCAT("Aluminium saturation value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?alumSatValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/esp' )) AS ?espURI)
+  BIND(CONCAT("Exchangeable sodium percentage for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?espLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/esp/value' )) AS ?espValueURI)
+  BIND(CONCAT("Exchangeable sodium percentage value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?espValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/tCEq' )) AS ?tCEqURI)
+  BIND(CONCAT("Calcium carbonate content for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?tCEqLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/tCEq/value' )) AS ?tCEqValueURI)
+  BIND(CONCAT("Calcium carbonate content value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?tCEqValueLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/gypsum' )) AS ?gypsumURI)
+  BIND(CONCAT("Gypsum for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID),  ". Sequence ", ?SEQUENCE) AS ?gypsumLabel)
+  BIND (URI(CONCAT(?HWSD2_SMU_ID, '/sequence/', ?SEQUENCE, '/profileElement/layer/', ?LAYER, '/observation/gypsum/value' )) AS ?gypsumValueURI)
+  BIND(CONCAT("Gypsum value for layer ", ?LAYER,  " for HWSD #",STR(?HWSD2_SMU_ID), ". Sequence ", ?SEQUENCE) AS ?gypsumValueLabel)
+
+}
+
+LIMIT 200
