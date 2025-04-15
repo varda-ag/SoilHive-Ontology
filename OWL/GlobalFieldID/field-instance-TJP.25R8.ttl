@@ -1,5 +1,6 @@
 @prefix : <http://example.org/data#> .
-@prefix ont: <http://example.org/ontology#> .
+@prefix ont: <https://purl.org/gfid#> .
+
 
 :dataField1 a ont:Field ;
     ont:fieldID "TJP.25R8" ;
