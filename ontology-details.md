@@ -28,7 +28,7 @@ This document outlines the key ontologies used within the SoilHive system, as we
 
 In addition to using existing ontologies, we will also create several custom snippets to fill specific gaps. This includes:
 
-- **Global Field ID**: A custom ontology for tracking and managing global field identifiers.
+- **Global Field ID**: A custom ontology for tracking and managing global field identifiers. See <https://purl.org/gfid#>.
 - **Water Management**: Custom ontology extensions to capture water management practices relevant to soil data.
 - **Other Soil-related Ontologies**: As we identify additional gaps in existing ontologies, we will create new components to fill these needs.
 
@@ -38,6 +38,6 @@ For more details on each external ontology, including links to relevant document
 - [AGROVOC Thesaurus](https://agrovoc.fao.org/browse/agrovoc/en/)
 - [ISO Standards](https://www.iso.org/)
 - [Semantic Sensor Network Ontology](https://www.w3.org/TR/vocab-ssn/)
-- [PROV Ontology](https://www.w3.org/TR/prov-o/)ß
+- [PROV Ontology](https://www.w3.org/TR/prov-o/)
 - [GeoSPARQL](https://www.ogc.org/standard/geosparql/)
 

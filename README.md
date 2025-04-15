@@ -29,6 +29,3 @@ SoilHive adheres to key ISO standards to ensure the interoperability and reliabi
 ## Contribution Guidelines
 
 Contributions to this repository are welcome! If you would like to suggest an ontology or improve the existing ones, please follow the guidelines outlined in [CONTRIBUTING.md](CONTRIBUTING.md).
-
-
-
